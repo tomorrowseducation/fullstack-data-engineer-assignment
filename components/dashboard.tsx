@@ -46,15 +46,19 @@ import {
   RadialBarChart,
 } from "recharts";
 import { MetricDTO } from "@/types/metric-dto";
+import { RankingDTO } from "@/types/ranking-dto";
+import { CourseDTO } from "@/types/course-dto";
 
 export function Dashboard({
   engagements,
   recommendations,
   metric,
+  ranking,
 }: {
   engagements: EngagementDTO[];
   recommendations: Recommendation[];
   metric: MetricDTO;
+  ranking: RankingDTO;
 }) {
   const chartData = [
     { effectiveness: metric.effectiveness, fill: "hsl(var(--chart-1))" },
@@ -187,6 +191,54 @@ export function Dashboard({
                 </PolarRadiusAxis>
               </RadialBarChart>
             </ChartContainer>
+          </CardContent>
+        </Card>
+        <Card className="col-span-1 lg:col-span-3 lg:row-span-3">
+          <CardHeader>
+            <CardTitle>Best courses</CardTitle>
+            <CardDescription>Top 3 courses</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Course Title</TableHead>
+                  <TableHead>Average Time Spent</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {ranking?.bestCourses.map((course: CourseDTO) => (
+                  <TableRow key={course._id.toString()}>
+                    <TableCell>{course.title}</TableCell>
+                    <TableCell>{course.avgTimeSpent}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+        <Card className="col-span-1 lg:col-span-3 lg:row-span-3">
+          <CardHeader>
+            <CardTitle>Worst courses</CardTitle>
+            <CardDescription>Worst 3 courses</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Course Title</TableHead>
+                  <TableHead>Average Time Spent</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {ranking?.worstCourses.map((course: CourseDTO) => (
+                  <TableRow key={course._id.toString()}>
+                    <TableCell>{course.title}</TableCell>
+                    <TableCell>{course.avgTimeSpent}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </CardContent>
         </Card>
       </main>
