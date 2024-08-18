@@ -8,7 +8,8 @@
     "generate": "tsx scripts/generate-data.ts",
     "analyze": "cross-env ANALYZE=true next build",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "playwright": "playwright test"
   },
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
@@ -33,6 +34,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@playwright/test": "^1.46.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.4.8",
     "@testing-library/react": "^16.0.0",
