@@ -9,7 +9,11 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "main": "hsl(var(--main))",
+      }
+    },
       colors: {
             "border": "hsl(var(--border))",
             "input": "hsl(var(--input))",

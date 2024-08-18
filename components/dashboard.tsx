@@ -91,7 +91,7 @@ export function Dashboard({
   });
 
   return (
-    <div className="flex flex-col h-full container">
+    <div className="flex flex-col h-full max-w-screen-xl px-4 mx-auto">
       <main className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
         <Card>
           <CardHeader>

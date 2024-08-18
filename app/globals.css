@@ -29,6 +29,7 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --main: 0 0% 95.7%;
   }
 
   .dark {
@@ -56,6 +57,7 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --main: 224 71.4% 4.1%;
   }
 }
 
@@ -66,29 +68,4 @@
   body {
     @apply bg-background text-foreground;
   }
-}
-
-body {
-  min-height: 100vh;
-  background-color: #f4f4f4;
-}
-
-header {
-  border-bottom: 1px solid hsla(0, 0%, 55%, 0.12);
-  display: flex;
-  align-items: center;
-}
-
-footer {
-  border-top: 1px solid hsla(0, 0%, 55%, 0.12);
-  padding: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.container {
-  max-width: 1280px;
-  padding: 0 1rem;
-  margin: 0 auto;
 }
