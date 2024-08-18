@@ -48,6 +48,10 @@ import {
 import { MetricDTO } from "@/types/metric-dto";
 import { RankingDTO } from "@/types/ranking-dto";
 import { CourseDTO } from "@/types/course-dto";
+import { PaginatedEngagementsDTO } from "@/types/paginated-engagements-dto";
+import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { DataTablePagination } from "./data-table/data-table-pagination";
+import { usePagination } from "@/hooks/usePagination";
 
 export function Dashboard({
   engagements,
@@ -55,7 +59,7 @@ export function Dashboard({
   metric,
   ranking,
 }: {
-  engagements: EngagementDTO[];
+  engagements: PaginatedEngagementsDTO;
   recommendations: Recommendation[];
   metric: MetricDTO;
   ranking: RankingDTO;
@@ -69,9 +73,26 @@ export function Dashboard({
     },
   } satisfies ChartConfig;
 
+  const { pageIndex, pageSize, setPagination } = usePagination();
+
+  const table = useReactTable({
+    data: engagements.items,
+    columns: [],
+    getCoreRowModel: getCoreRowModel(),
+    manualPagination: true,
+    rowCount: engagements.total,
+    onPaginationChange: setPagination,
+    state: {
+      pagination: {
+        pageIndex,
+        pageSize,
+      },
+    },
+  });
+
   return (
     <div className="flex flex-col h-full">
-      <main className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 gap-6 p-6">
+      <main className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-1 gap-6 p-6">
         <Card className="col-span-1 lg:col-span-3 lg:row-span-3">
           <CardHeader>
             <CardTitle>User Engagement</CardTitle>
@@ -79,7 +100,7 @@ export function Dashboard({
               Detailed engagement data for each user and course type.
             </CardDescription>
           </CardHeader>
-          <CardContent className="max-h-[20lh] overflow-y-scroll">
+          <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
@@ -90,7 +111,7 @@ export function Dashboard({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {engagements?.map((engagement: EngagementDTO) => (
+                {engagements?.items.map((engagement: EngagementDTO) => (
                   <TableRow key={engagement.id}>
                     <TableCell>{engagement.userName}</TableCell>
                     <TableCell>{engagement.courseTitle}</TableCell>
@@ -100,6 +121,7 @@ export function Dashboard({
                 ))}
               </TableBody>
             </Table>
+            <DataTablePagination table={table} />
           </CardContent>
         </Card>
         <Card>
@@ -110,7 +132,7 @@ export function Dashboard({
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="text-5xl font-bold">{engagements.length}</div>
+            <div className="text-5xl font-bold">{engagements?.total}</div>
           </CardContent>
         </Card>
         <Card>

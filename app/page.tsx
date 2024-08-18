@@ -1,15 +1,29 @@
 import { Dashboard } from "@/components/dashboard";
 import { Recommendation } from "@/models";
-import { EngagementDTO } from "@/types/engagement-dto";
+import { MetricDTO } from "@/types/metric-dto";
+import { PaginatedEngagementsDTO } from "@/types/paginated-engagements-dto";
+import { RankingDTO } from "@/types/ranking-dto";
 import { headers } from "next/headers";
 
-export default async function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   const baseUrl = headers().get("Host")!;
 
+  const page = Number(searchParams["page"]) || 1;
+  const pageSize = Number(searchParams["pageSize"]) || 10;
+
   const { engagements } = await fetch(
-    new URL("/api/engagements", `http://${baseUrl}`),
+    new URL(
+      `/api/engagements?page=${page}&pageSize=${pageSize}`,
+      `http://${baseUrl}`
+    ),
     { cache: "no-store" }
-  ).then((res) => res.json() as Promise<{ engagements: EngagementDTO[] }>);
+  ).then(
+    (res) => res.json() as Promise<{ engagements: PaginatedEngagementsDTO }>
+  );
 
   const { recommendations } = await fetch(
     new URL("/api/recommendations", `http://${baseUrl}`),
