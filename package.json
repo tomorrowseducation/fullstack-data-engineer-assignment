@@ -5,16 +5,19 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "generate": "tsx scripts/generate-data.ts"
+    "generate": "tsx scripts/generate-data.ts",
+    "analyze": "cross-env ANALYZE=true next build"
   },
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
+    "@next/bundle-analyzer": "^14.2.5",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@tanstack/react-table": "^8.20.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "cross-env": "^7.0.3",
     "lucide-react": "^0.424.0",
     "mongodb": "^6.8.0",
     "next": "^14.2.5",
