@@ -16,8 +16,12 @@ export default async function Home() {
     { cache: "no-store" }
   ).then((res) => res.json() as Promise<{ recommendations: Recommendation[] }>);
 
+  const { metric } = await fetch(new URL("/api/metrics", `http://${baseUrl}`), {
+    cache: "no-store",
+  }).then((res) => res.json() as Promise<{ metric: MetricDTO }>);
+
   return (
-    <Dashboard engagements={engagements} recommendations={recommendations} />
+    <Dashboard engagements={engagements} recommendations={recommendations} metric={metric} />
   );
 }
 
