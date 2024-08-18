@@ -32,13 +32,14 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import { Engagement, Recommendation } from "@/models";
+import { Recommendation } from "@/models";
+import { EngagementDTO } from "@/types/engagement-dto";
 
 export function Dashboard({
   engagements,
   recommendations,
 }: {
-  engagements: Engagement[];
+  engagements: EngagementDTO[];
   recommendations: Recommendation[];
 }) {
   return (
@@ -55,17 +56,17 @@ export function Dashboard({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>User Id</TableHead>
-                  <TableHead>Course Id</TableHead>
+                  <TableHead>User Name</TableHead>
+                  <TableHead>Course Title</TableHead>
                   <TableHead>Timestamp</TableHead>
                   <TableHead>Time Spent</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {engagements?.map((engagement: Engagement) => (
-                  <TableRow key={engagement._id.toString()}>
-                    <TableCell>{engagement.userId}</TableCell>
-                    <TableCell>{engagement.courseId}</TableCell>
+                {engagements?.map((engagement: EngagementDTO) => (
+                  <TableRow key={engagement.id}>
+                    <TableCell>{engagement.userName}</TableCell>
+                    <TableCell>{engagement.courseTitle}</TableCell>
                     <TableCell>{engagement.timestamp}</TableCell>
                     <TableCell>{engagement.timeSpent}</TableCell>
                   </TableRow>
