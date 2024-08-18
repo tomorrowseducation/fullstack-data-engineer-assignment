@@ -1,11 +1,19 @@
-import { CourseSchema } from "@/models";
-import { ObjectId } from "mongodb";
+import { Course, CourseSchema } from "@/models";
 import { z } from "zod";
 
 export const courseDTOSchema = z.object({
-  _id: z.instanceof(ObjectId),
+  id: z.string(),
   title: CourseSchema.shape.title,
   avgTimeSpent: z.number(),
 });
 
 export type CourseDTO = z.infer<typeof courseDTOSchema>;
+export const CourseDTO = {
+  fromEntity(entity: Course): CourseDTO {
+    return courseDTOSchema.parse({
+      id: entity._id.toHexString(),
+      title: entity.title,
+      avgTimeSpent: 0,
+    });
+  },
+};

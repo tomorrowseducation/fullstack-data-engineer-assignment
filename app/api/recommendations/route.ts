@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/mongodb";
+import { RecommendationDTO } from "@/types/recommendation-dto";
+import { Recommendation } from "@/models";
 
 export async function GET(_: NextRequest) {
   try {
@@ -12,8 +14,12 @@ export async function GET(_: NextRequest) {
         .sort({ createdAt: -1 })
         .toArray()) ?? [];
 
+    const recommendationsDTO = recommendations.map((m) => ({
+      ...RecommendationDTO.fromEntity(m as Recommendation),
+    }));
+
     return NextResponse.json(
-      { success: true, recommendations },
+      { success: true, recommendations: recommendationsDTO },
       { status: 200 }
     );
   } catch (error) {

@@ -52,6 +52,7 @@ import { PaginatedEngagementsDTO } from "@/types/paginated-engagements-dto";
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { DataTablePagination } from "./data-table/data-table-pagination";
 import { usePagination } from "@/hooks/usePagination";
+import { RecommendationDTO } from "@/types/recommendation-dto";
 
 export function Dashboard({
   engagements,
@@ -60,7 +61,7 @@ export function Dashboard({
   ranking,
 }: {
   engagements: PaginatedEngagementsDTO;
-  recommendations: Recommendation[];
+  recommendations: RecommendationDTO[];
   metric: MetricDTO;
   ranking: RankingDTO;
 }) {
@@ -225,7 +226,7 @@ export function Dashboard({
               </TableHeader>
               <TableBody>
                 {ranking?.bestCourses.map((course: CourseDTO) => (
-                  <TableRow key={course._id.toString()}>
+                  <TableRow key={course.id}>
                     <TableCell>{course.title}</TableCell>
                     <TableCell>{course.avgTimeSpent}</TableCell>
                   </TableRow>
@@ -249,7 +250,7 @@ export function Dashboard({
               </TableHeader>
               <TableBody>
                 {ranking?.worstCourses.map((course: CourseDTO) => (
-                  <TableRow key={course._id.toString()}>
+                  <TableRow key={course.id}>
                     <TableCell>{course.title}</TableCell>
                     <TableCell>{course.avgTimeSpent}</TableCell>
                   </TableRow>

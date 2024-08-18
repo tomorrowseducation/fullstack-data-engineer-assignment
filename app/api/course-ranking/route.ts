@@ -1,4 +1,7 @@
 import { connectToDatabase } from "@/lib/mongodb";
+import { Course } from "@/models";
+import { CourseDTO } from "@/types/course-dto";
+import { BSON } from "mongodb";
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 
@@ -39,7 +42,7 @@ export async function GET() {
       // relevant fields
       {
         $project: {
-          _id: 1,
+          _id: { $toObjectId: "$_id" },
           title: 1,
           avgTimeSpent: { $round: ["$avgTimeSpent", 2] },
         },
@@ -67,7 +70,27 @@ export async function GET() {
       ])
       .toArray();
 
-    return NextResponse.json({ success: true, ranking }, { status: 200 });
+    // Map to DTO(s)
+    const bestCourses = ranking.bestCourses.map((m: BSON.Document) => ({
+      ...CourseDTO.fromEntity(m as Course),
+      avgTimeSpent: m.avgTimeSpent,
+    }));
+
+    const worstCourses = ranking.worstCourses.map((m: BSON.Document) => ({
+      ...CourseDTO.fromEntity(m as Course),
+      avgTimeSpent: m.avgTimeSpent,
+    }));
+
+    return NextResponse.json(
+      {
+        success: true,
+        ranking: {
+          bestCourses,
+          worstCourses,
+        },
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.log("Failed to get course ranking.", error);
     if (error instanceof ZodError) {
