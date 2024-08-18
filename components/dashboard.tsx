@@ -91,9 +91,94 @@ export function Dashboard({
   });
 
   return (
-    <div className="flex flex-col h-full">
-      <main className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-1 gap-6 p-6">
-        <Card className="col-span-1 lg:col-span-3 lg:row-span-3">
+    <div className="flex flex-col h-full container">
+      <main className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Recommendations</CardTitle>
+            <CardDescription>
+              The number of recommendations given to users and the ratio of used
+              recommendations.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4">
+              <div className="flex items-center justify-between">
+                <div>Recommendations Given</div>
+                <div className="text-2xl font-bold">
+                  {recommendations?.length}
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Total Engagements</CardTitle>
+            <CardDescription>
+              The total number of engagements across all users and course types.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="text-5xl font-bold">{engagements?.total}</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Effectiveness</CardTitle>
+            <CardDescription>
+              The effectiveness of our recommendations
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex-1">
+            <ChartContainer
+              config={chartConfig}
+              className="mx-auto aspect-square max-h-[80px]"
+            >
+              <RadialBarChart
+                data={chartData}
+                endAngle={(chartData[0].effectiveness * 360) / 100}
+                innerRadius={30}
+                outerRadius={50}
+              >
+                <PolarGrid
+                  gridType="circle"
+                  radialLines={false}
+                  stroke="none"
+                  className="first:fill-muted last:fill-background"
+                  polarRadius={[34, 26]}
+                />
+                <RadialBar dataKey="effectiveness" background />
+                <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
+                  <Label
+                    content={({ viewBox }) => {
+                      if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                        return (
+                          <text
+                            x={viewBox.cx}
+                            y={viewBox.cy}
+                            textAnchor="middle"
+                            dominantBaseline="middle"
+                          >
+                            <tspan
+                              x={(viewBox.cx || 0) + 1}
+                              y={(viewBox.cy || 0) + 2}
+                              className="fill-foreground text-base font-bold"
+                            >
+                              {chartData[0].effectiveness.toLocaleString()}%
+                            </tspan>
+                          </text>
+                        );
+                      }
+                    }}
+                  />
+                </PolarRadiusAxis>
+              </RadialBarChart>
+            </ChartContainer>
+          </CardContent>
+        </Card>
+
+        <Card className="col-span-1 lg:col-span-3">
           <CardHeader>
             <CardTitle>User Engagement</CardTitle>
             <CardDescription>
@@ -124,98 +209,8 @@ export function Dashboard({
             <DataTablePagination table={table} />
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Total Engagements</CardTitle>
-            <CardDescription>
-              The total number of engagements across all users and course types.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-5xl font-bold">{engagements?.total}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Recommendations</CardTitle>
-            <CardDescription>
-              The number of recommendations given to users and the ratio of used
-              recommendations.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4">
-              <div className="flex items-center justify-between">
-                <div>Recommendations Given</div>
-                <div className="text-2xl font-bold">
-                  {recommendations?.length}
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Effectiveness</CardTitle>
-            <CardDescription>
-              The effectiveness of our recommendations
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex-1 pb-0">
-            <ChartContainer
-              config={chartConfig}
-              className="mx-auto aspect-square max-h-[250px]"
-            >
-              <RadialBarChart
-                data={chartData}
-                endAngle={(chartData[0].effectiveness * 360) / 100}
-                innerRadius={80}
-                outerRadius={140}
-              >
-                <PolarGrid
-                  gridType="circle"
-                  radialLines={false}
-                  stroke="none"
-                  className="first:fill-muted last:fill-background"
-                  polarRadius={[86, 74]}
-                />
-                <RadialBar dataKey="effectiveness" background />
-                <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
-                  <Label
-                    content={({ viewBox }) => {
-                      if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                        return (
-                          <text
-                            x={viewBox.cx}
-                            y={viewBox.cy}
-                            textAnchor="middle"
-                            dominantBaseline="middle"
-                          >
-                            <tspan
-                              x={viewBox.cx}
-                              y={viewBox.cy}
-                              className="fill-foreground text-4xl font-bold"
-                            >
-                              {chartData[0].effectiveness.toLocaleString()}%
-                            </tspan>
-                            <tspan
-                              x={viewBox.cx}
-                              y={(viewBox.cy || 0) + 24}
-                              className="fill-muted-foreground"
-                            >
-                              Effectiveness
-                            </tspan>
-                          </text>
-                        );
-                      }
-                    }}
-                  />
-                </PolarRadiusAxis>
-              </RadialBarChart>
-            </ChartContainer>
-          </CardContent>
-        </Card>
-        <Card className="col-span-1 lg:col-span-3 lg:row-span-3">
+
+        <Card className="col-span-1 lg:col-span-3">
           <CardHeader>
             <CardTitle>Best courses</CardTitle>
             <CardDescription>Top 3 courses</CardDescription>
@@ -239,7 +234,7 @@ export function Dashboard({
             </Table>
           </CardContent>
         </Card>
-        <Card className="col-span-1 lg:col-span-3 lg:row-span-3">
+        <Card className="col-span-1 lg:col-span-3">
           <CardHeader>
             <CardTitle>Worst courses</CardTitle>
             <CardDescription>Worst 3 courses</CardDescription>
